@@ -1,43 +1,33 @@
-
-#let slide(
-  ..contents
-) = {
-
-  show text: text.with(size: 3em, fill: white);
-
-  let slide_contents = ()
-
-  for content in contents.pos() {
-    slide_contents.push(content)
-    page(
-      paper: "a4",
-      flipped: true,
-      fill: rgb("#233"),
-      align(center + horizon,
-        for content in slide_contents { content }
-      )
-    )
-  }
-}
+#import "@preview/polylux:0.4.0": *
+#import toolbox.pdfpc
 
 #slide[
   = Rust
-  === Un lenguaje moderno, seguro, y eficiente
+  #image("media/cuddlyferris.svg", width: 300pt)
+  === Un lenguaje simple y aburrido
+
+  
+  #pdfpc.speaker-note("Aburrido por que no tiene sorpresas")
+]
+#slide[
+  = Datos y Funciones
+
 ]
 
 #slide[
-  = Tipos
-  ```rust
-  struct Book(Vec<Page>);
-  ```
+  = Type System
+]
+#slide[
+  == Sum Types
+]
+#slide[
+  == Product Types
 ]
 
 #slide[
-  = Propiedad
+  = Pattern Matching
 ]
 
 #slide[
-  = Macros
+  = Generics<>
 ]
-
-
