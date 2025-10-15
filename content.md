@@ -44,26 +44,35 @@ utility of them.
 
 ## Talk road map
 
-- [Language]
-- Algebraic types
-  - Product types (structs & tuples)
-  - Sum types (enums)
-  - Generics
-  - Traits
-  - Impl blocks
-+ Functions
-+ Operators (just function aliases)
-+ Variables
-+ Control structures
-  + If
-  + Loop, While, For
-    - Iterator Trait
-  - Pattern matching (match, destructure, if let...)
+[Language]
+- Variables & literals
 - Ownership
   - References
   - Lifetimes
-  - Impl sugar & dyn
-- [Environment]
+- Algebraic data types
+  + Product (Struct & Tuples)
+  + Sum (Enums)
+    - Impl blocks
+  - Power (Functions)
+    - Functions
+      - Operators (just function aliases)
+- Data types
+  - Generics
+  - Traits
+- Control structures
+  - If
+  - Loop -> While -> For
+    - hint Iterator Trait
+  - Pattern matching
+    - match
+    - destructuring
+    - let pattern
+    - if let
+- Macros
+  - Derive
+  - Rules
+  - Proc
+[Environment]
 - Collections
   - String
   - Vec
@@ -74,7 +83,7 @@ utility of them.
 - Smart pointers
   - Box
   - Rc & Arc
-- [Sugar!]
+[Idiomatic rust]
   - TODO
   - See all the previous points that have some sugar
 
@@ -87,6 +96,9 @@ All of them have the `read input` and `iterators` duh
 11.simulator (array, enums)
 14.simulator (array, structs)
 15.sumulator (array, structs, enums)
-## Media
 
+## Media
 - Ferris [rustacean.net](rustacean.net)
+
+## Resources
+- https://github.com/mre/idiomatic-rust
