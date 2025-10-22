@@ -1,11 +1,19 @@
 #import "@preview/polylux:0.4.0": *
 #import "@preview/metropolis-polylux:0.1.0" as metropolis
 #import metropolis: new-section, focus
-#import "@preview/zebraw:0.5.5": zebraw
+#import "@preview/codly:1.3.0": *
 
-#show: zebraw.with(
-  lang: false,
+#show: codly-init
+
+#codly(
+  display-name: false,
+  number-format: none,
+  // zebra-fill: none,
+  // stroke: none,,
+  // lang-inset: 0pt,
 )
+
+#show raw: it => block(width: 50%, it)
 
 #show: metropolis.setup.with(
   text-font: "DejaVu Sans",
@@ -14,15 +22,6 @@
 )
 #let bg = rgb("#23373b") // dark teal
 #let fg = white.darken(2%)
-
-#let show-code(lines: (), code) = {
-  reveal-code(
-    code,
-    lines: lines,
-    after: gray,
-    full: false
-  )
-}
 
 #let side-by-side(..body) = stack(
   dir: ltr,
@@ -44,7 +43,7 @@
   #text(size: .8em, weight: "light")[Victor Diez Ruiz]
 
   
-  #place(bottom + right, dy: -30pt,
+  #place(bottom + right,
     ```rust
     fn main() {
       println!("Hello world 🦀");
@@ -52,7 +51,7 @@
     ```
   )
 
-  #place(bottom + right, scale(x: 100%,
+  #place(bottom + center, dx: -70pt, scale(x: -100%,
     image("media/rustacean-flat-gesture.svg", width: 160pt)
   ))
     
@@ -73,16 +72,14 @@
   = Scopes
 
   #side-by-side[
-    #block(width: 50%, radius: 50pt)[
     ```rust
     fn main() {
       let a = 2;
       let b = 3;
-
       println!("{}", a + b);
     }
     ```
-  ]][
+  ][
     #image("media/rustacean-flat-gesture.svg", width: 260pt)
   ]
 ]
@@ -96,18 +93,20 @@
     fn main() {
       let a = 2;
       { let b = 3; }
-
       println!("{}", a + b);
     }
-    ```)
-    #only(2, ```rust
-    fn main() {
-      let a = 2;
-      { let b = 3; }
-
-      println!("{}", a + b);
-    }
-    ```)
+    ```
+    )
+    #only(2, [
+    #codly(highlighted-lines: (1,2))
+    ```rust
+      fn main() {
+        let a = 2;
+        { let b = 3; }
+        println!("{}", a + b);
+      }
+      ```]
+    )
   ]
 ]
 
@@ -118,7 +117,6 @@
     fn main() {
       let a = 2;
       let b = 3;
-
       println!("{}", a + b);
     }
     ```
