@@ -1,15 +1,19 @@
 #import "@preview/polylux:0.4.0": *
 #import "@preview/metropolis-polylux:0.1.0" as metropolis
 #import metropolis: new-section, focus
+#import "@preview/zebraw:0.5.5": zebraw
+
+#show: zebraw.with(
+  lang: false,
+)
 
 #show: metropolis.setup.with(
   text-font: "DejaVu Sans",
   math-font: "DejaVu Math TeX Gyre",
   code-font: "JetBrainsMono NF",
-  footer: [hola]
 )
-// Remove the footer
-#set page(footer: [])
+#let bg = rgb("#23373b") // dark teal
+#let fg = white.darken(2%)
 
 #let show-code(lines: (), code) = {
   reveal-code(
@@ -20,84 +24,159 @@
   )
 }
 
-#show raw.where(lang: "rust"): it => box(
-  inset: (y: 1em, x: .1em),
-  radius: 15pt,
-  it
+#let side-by-side(..body) = stack(
+  dir: ltr,
+  spacing: 1fr,
+  [],
+  ..body,
+  []
 )
-
 
 #slide[
   #set page(header: none, footer: none, margin: 3em)
 
-  #text(size: 2em)[
-    *Rust*
-  ]
+  #text(size: 2em)[*Rust*]
 
-  Un lenguaje expresivo y aburrido
+  A boring and expressive language
 
   #metropolis.divider
   
-  #set text(size: .8em, weight: "light")
-  Victor Diez Ruiz
+  #text(size: .8em, weight: "light")[Victor Diez Ruiz]
 
   
   #place(bottom + right, dy: -30pt,
     ```rust
-fn main() {
-  println!("Hello world 🦀");
-}
+    fn main() {
+      println!("Hello world 🦀");
+    }
     ```
   )
 
-  #place(bottom + center, scale(x: -100%,
+  #place(bottom + right, scale(x: 100%,
     image("media/rustacean-flat-gesture.svg", width: 160pt)
   ))
     
 ]
 
-// #slide[
-//   = ¿Qué vamos a ver?
-
-//   #metropolis.outline
-// ]
-
-#new-section[Lenguaje]
-
 #slide[
-  = Variables y literales
-  #show-code(lines: (1,2,3,4),
-  ```rust
-    let numero = 9_000_000_0_00_000;
-    let flotante = 3.141592654;
-    let texto = "hola";
-    let booleano = true;
-  ```
-  )
-  
+  = Why Rust rocks
 
+  #side-by-side[
+    #metropolis.outline
+  ][
+    #image("media/rustacean-flat-happy.svg", width: 260pt)
+  ]
+]
+
+#new-section[Lifetimes & Ownership]
+#slide[
+  = Scopes
+
+  #side-by-side[
+    #block(width: 50%, radius: 50pt)[
+    ```rust
+    fn main() {
+      let a = 2;
+      let b = 3;
+
+      println!("{}", a + b);
+    }
+    ```
+  ]][
+    #image("media/rustacean-flat-gesture.svg", width: 260pt)
+  ]
 ]
 
 #slide[
-  slide without a title
+  = Lifetimes
+  #side-by-side[
+    #scale(x: -100%, image("media/rustacean-flat-gesture.svg", width: 260pt))
+  ][
+    #only(1, ```rust
+    fn main() {
+      let a = 2;
+      { let b = 3; }
+
+      println!("{}", a + b);
+    }
+    ```)
+    #only(2, ```rust
+    fn main() {
+      let a = 2;
+      { let b = 3; }
+
+      println!("{}", a + b);
+    }
+    ```)
+  ]
 ]
 
-#new-section[My second section]
-
 #slide[
-  = Heron algorithm
+  = Ownership  
+  #side-by-side[
+    ```rust
+    fn main() {
+      let a = 2;
+      let b = 3;
 
-  ```julia
-  function heron(x)
-      r = x
-      while abs(r^2 - x) > eps()
-          r = (r + x / r) / 2
-      end
-      return r
-  end
+      println!("{}", a + b);
+    }
+    ```
+  ][
+    Memory representation\
+    todo
+    #image("media/rustacean-flat-happy.svg", width: 260pt)
+  ]
+]
 
-  @test heron(42) ≈ sqrt(42)
-  ```
+#new-section[Inmutability by default]
+#slide[
+  = Inmutability by default
+
+  #side-by-side[
+    ```rust
+    fn main() {
+      let a = 2;
+      let mut b = 3;
+
+      a = 3; //  error
+      b = 2; //  ok
+    }
+    ```
+  ][
+    #image("media/rustacean-flat-gesture.svg", width: 260pt)
+  ]
+]
+
+#new-section[Algebraic Data Types]
+#slide[
+  = Algebraic Data Types
+  product sum power
+
+  #toolbox.pdfpc.speaker-note("Math with types!")
+]
+
+
+#new-section[Pattern Matching]
+#slide[
+  = Pattern Matching
+
+  destructurar por destructurar
+
+]
+
+#new-section[Traits]
+#slide[
+  = Traits
+
+  interfaces pero mucho mejor
+]
+
+#new-section[Macros]
+#slide[
+  = Macros
+
+  python en rust?!?!
 ]
 
 #slide[

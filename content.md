@@ -45,7 +45,6 @@ utility of them.
 ## Talk road map
 
 [Language]
-- Variables & literals
 - Ownership
   - References
   - Lifetimes
