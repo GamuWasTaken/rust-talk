@@ -3,33 +3,34 @@
 #import metropolis: new-section, focus
 #import "@preview/codly:1.3.0": *
 
-#show: codly-init
-
-#codly(
-  display-name: false,
-  number-format: none,
-  // zebra-fill: none,
-  // stroke: none,,
-  // lang-inset: 0pt,
-)
-
-#show raw: it => block(width: 50%, it)
 
 #show: metropolis.setup.with(
   text-font: "DejaVu Sans",
   math-font: "DejaVu Math TeX Gyre",
   code-font: "JetBrainsMono NF",
 )
+#show: codly-init
+
+#set grid(columns: (1fr, 1fr), align: center)
+#set page(margin: (x: 3em))
+
+#codly(
+  display-name: false,
+  // number-format: none,
+  // zebra-fill: none,
+  // stroke: none,,
+  // lang-inset: 0pt,
+)
+
+#let ferris(dir: ltr, width: 260pt, type: "gesture") = scale(
+    x: if dir == ltr { 1 } else { -1 } * 100%,
+    image("media/ferris-"+type+".svg",
+    width: width)
+)
+
 #let bg = rgb("#23373b") // dark teal
 #let fg = white.darken(2%)
-
-#let side-by-side(..body) = stack(
-  dir: ltr,
-  spacing: 1fr,
-  [],
-  ..body,
-  []
-)
+#let ec = red.lighten(70%)
 
 #slide[
   #set page(header: none, footer: none, margin: 3em)
@@ -41,29 +42,28 @@
   #metropolis.divider
   
   #text(size: .8em, weight: "light")[Victor Diez Ruiz]
-
   
-  #place(bottom + right,
+  #grid[
+    #ferris(dir: rtl, width: 180pt)
+  ][
     ```rust
     fn main() {
-      println!("Hello world 🦀");
+      println!("Hello 🦀");
     }
     ```
-  )
-
-  #place(bottom + center, dx: -70pt, scale(x: -100%,
-    image("media/rustacean-flat-gesture.svg", width: 160pt)
-  ))
-    
+    ]
 ]
 
 #slide[
   = Why Rust rocks
 
-  #side-by-side[
-    #metropolis.outline
+  #grid[
+    #align(
+    left,  
+    metropolis.outline
+    )
   ][
-    #image("media/rustacean-flat-happy.svg", width: 260pt)
+    #ferris()
   ]
 ]
 
@@ -71,59 +71,94 @@
 #slide[
   = Scopes
 
-  #side-by-side[
-    ```rust
+  #grid[
+    #only(1,```rust
     fn main() {
       let a = 2;
       let b = 3;
       println!("{}", a + b);
     }
-    ```
+    ```)
+    #only(2,[
+      #codly(
+        highlights: (
+          // scope limits
+          (line: 1, start: 11, fill: blue, tag: "<scope>"),
+          (line: 5, start: 1, fill: blue, tag: "</scope>"),
+        ),
+      )
+      ```rust
+      fn main() {
+        let a = 2;
+        let b = 3;
+        println!("{}", a + b);
+      }
+      ```
+    ])
   ][
-    #image("media/rustacean-flat-gesture.svg", width: 260pt)
+    #ferris(width: 260pt)
   ]
 ]
 
 #slide[
   = Lifetimes
-  #side-by-side[
-    #scale(x: -100%, image("media/rustacean-flat-gesture.svg", width: 260pt))
+  #grid[
+    #ferris(dir: rtl)
   ][
-    #only(1, ```rust
+    #only(1,
+    ```rust
     fn main() {
       let a = 2;
-      { let b = 3; }
+      {
+        let b = 3;
+      }
       println!("{}", a + b);
     }
     ```
     )
     #only(2, [
-    #codly(highlighted-lines: (1,2))
-    ```rust
+      #codly(
+        highlights: (
+          // 'a
+          (line: 1, start: 11, fill: blue, tag: "<'a>"),
+          (line: 7, start: 1, fill: blue, tag: "</'a>"),
+          // 'b
+          (line: 3, start: 3, fill: green, tag: "<'b>"),
+          (line: 5, start: 3, fill: green, tag: "</'b>"),
+          // error
+          (line: 6, start: 22, end: 22, fill: red),
+        ),
+        highlighted-lines: ((6, ec),)
+      )
+      ```rust
       fn main() {
-        let a = 2;
-        { let b = 3; }
+        let a: 'a = 2;
+        {
+          let b: 'b = 3;
+        }
         println!("{}", a + b);
       }
-      ```]
-    )
+      ```
+    ])
   ]
 ]
 
 #slide[
   = Ownership  
-  #side-by-side[
+  #grid[
     ```rust
     fn main() {
-      let a = 2;
-      let b = 3;
+      let a: 'a = 2;
+      {
+        let b: 'b = 3;
+      }
       println!("{}", a + b);
     }
     ```
   ][
     Memory representation\
-    todo
-    #image("media/rustacean-flat-happy.svg", width: 260pt)
+    in 2/3 slides
+    #ferris(type: "gesture", width: 260pt)
   ]
 ]
 
@@ -131,7 +166,14 @@
 #slide[
   = Inmutability by default
 
-  #side-by-side[
+  #grid[
+    #codly(
+      highlights: (
+        // mut
+        (line: 3, start: 7, end: 9, fill: green),
+      ),
+      highlighted-lines: ((5, ec),)
+    )
     ```rust
     fn main() {
       let a = 2;
@@ -142,14 +184,23 @@
     }
     ```
   ][
-    #image("media/rustacean-flat-gesture.svg", width: 260pt)
+    #ferris(type: "happy", width: 260pt)
   ]
 ]
 
 #new-section[Algebraic Data Types]
 #slide[
   = Algebraic Data Types
-  product sum power
+
+  #grid[
+    #ferris(type: "gesture", dir: rtl, width: 260pt)
+  ][
+    #one-by-one[
+      ```julia bool : { true, false }```\
+    ][
+      ```julia   u8 : { 1, ..., 255 }```
+    ]
+  ]
 
   #toolbox.pdfpc.speaker-note("Math with types!")
 ]
