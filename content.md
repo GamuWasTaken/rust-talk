@@ -5,10 +5,6 @@ utility of them.
 
 - General [GN]
   - Basic types
-    - Numerical
-    - Bool
-    - Char
-    - Array
 - Type System [TS]
   - Sum types
     - Fat enums
@@ -75,7 +71,6 @@ utility of them.
 - Collections
   - String
   - Vec
-  - HashMap
 - Error handling
   - Option
   - Result

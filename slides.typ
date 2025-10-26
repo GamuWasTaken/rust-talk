@@ -31,6 +31,7 @@
 #let fg = white.darken(2%)
 #let ec = red.lighten(70%)
 
+
 #slide[
   #set page(header: none, footer: none, margin: 3em)
 
@@ -123,7 +124,30 @@
   ]
   #toolbox.pdfpc.speaker-note("Lifetimes")
 ]
+#let memory(..content) = box(width: 70%, grid(
+      columns: (1fr,) * 4,
+      rows: (5pt, 5pt, 1em + 10pt),
+      fill: (x, y) => if y == 2 { bg.lighten(60%) },
+      stroke: (x, y) => if y == 2 { bg + 2pt },
+      inset: 5pt,
 
+      ..content.pos().map(e => {
+        (
+          if e.life.contains(1) {grid.cell(
+            y: 0,
+            fill: lime,
+            stroke: (left: lime + 2pt, y: lime)
+          )[]},
+          if e.life.contains(0) {grid.cell(
+            y: 1,
+            fill: orange,
+            stroke: (left: orange + 2pt, y: orange)
+          )[]},
+          grid.cell(y: 2, fill: aqua.lighten(60%), e.content)
+        )
+      }).flatten()
+    ))
+      
 #slide[
   = Sir that's mine
   #grid[
@@ -137,11 +161,64 @@
     }
     ```
   ][
-    Memory representation\
-    in 2/3 slides
+
+    #only("1", {
+      memory()
+      codly(
+        highlights: (
+          (line: 1, start: 11, end: 11, fill: orange, tag: "<'a>"),
+          (line: 2, start: 10, end: 11, fill: orange),
+        ),
+        highlighted-lines: ((2, aqua.lighten(60%)),)
+      )
+    })
+    #only("2", {
+      memory((content: [2], life: (0,)))
+      codly(
+        highlights: (
+          (line: 1, start: 11, end: 11, fill: orange, tag: "<'a>"),
+          (line: 3, start: 3, end: 3, fill: lime, tag: "<'b>"),
+          (line: 4, start: 12, end: 13, fill: lime),
+        ),
+        highlighted-lines: ((4, aqua.lighten(60%)),)
+      )
+    })
+    #only("3", {
+      memory((content: [2], life: (0,)),(content: [3], life: (0,1)))
+      codly(
+        highlights: (
+          (line: 1, start: 11, end: 11, fill: orange, tag: "<'a>"),
+          (line: 3, start: 3, end: 3, fill: lime, tag: "<'b>"),
+          (line: 5, start: 3, end: 3, fill: lime, tag: "</'b>"),
+          (line: 6, start: 22, end: 22, fill: red),
+        ),
+        highlighted-lines: ((6, aqua.lighten(60%)),)
+      )
+    })
+    #only("4", {
+      memory((content: [2], life: (0,)),)
+      codly(
+        highlights: (
+          (line: 1, start: 11, end: 11, fill: orange, tag: "<'a>"),
+          (line: 3, start: 3, end: 3, fill: lime, tag: "<'b>"),
+          (line: 5, start: 3, end: 3, fill: lime, tag: "</'b>"),
+          (line: 6, start: 22, end: 22, fill: red),
+          (line: 7, start: 1, end: 1, fill: orange, tag: "</'a>"),
+        ),
+      )
+    })
+    #only("5", {
+      memory()
+    })
+    
     #ferris()
+    
   ]
   #toolbox.pdfpc.speaker-note("Ownership")
+  // TODO Explain ownership
+  // references
+  // mut references
+  // generics with lifetimes
 ]
 
 #new-section[Inmutability by default]
@@ -206,7 +283,7 @@
     // Addition
     #only("1-2")[
       Addition\
-      ```julia bool{2} + unit{1} = 3```
+      ```julia bool{2} + unit{1} = {3}```
     ]
     #only("2")[
       ```rust
@@ -217,6 +294,7 @@
       ```
     ]
     #only("3")[
+      ```julia unit{1} * 4 = {4}```
       ```rust
       enum Directions {
         North,
@@ -241,7 +319,7 @@
     // Multiplication
     #only("1-")[
       Multiplication\
-      ```julia bool{2} * Direction{4} = 8```
+      ```julia bool{2} * Direction{4} = {8}```
     ]
     #only("2")[
       ```rust
@@ -260,7 +338,7 @@
   #grid(columns: (2fr, 1fr))[
     #only("1-")[
       Exponentiation\
-      ```julia bool{2} ^ bool{2} = 4```
+      ```julia bool{2} ^ bool{2} = {4}```
     ]
     #only("2")[
       ```rust
@@ -303,7 +381,7 @@
 ]
 
 #slide[
-  = Without exception, no exception is good
+  = Without exception
   #grid(columns: (2fr, 3fr))[
     #only("-1", ferris(dir: rtl))
     #only("2", ferris(type: "happy"))
@@ -330,24 +408,81 @@
 #slide[
   = Not like tinder
 
-  destructurar por destructurar
-  // destructure types
-  // wildcards
-  // 
+  #grid(columns: (2fr, 1fr))[
+    #only("2", codly(
+      highlights: (
+        (line: 2, start: 6, end: 10, fill: green),
+        (line: 4, start: 7, end: 11, fill: green),
+      ),
+    ))
+    ```rust
+    match result {
+      Ok(phone) 
+        println!("tlf: {}", phone),
+      Err(cause) 
+        println!("error: {}", cause)
+    }
+    ```
+  ][
+    #only("-1", ferris())
+    #only("2", ferris(type: "happy"))
+  ]
+]
 
+#slide[
+  = Why stop there?
+  #grid(columns: (2fr, 3fr))[
+    #only("-2", ferris(dir: rtl))
+    #only("3", ferris(type: "happy"))
+  ][
+    #only("1-2")[
+      #one-by-one[
+        ```rust
+        let Ok(theme) = get_theme()
+          else { return CannotGetTheme; };
+        ```
+      ][
+        
+        ```rust
+        let theme = get_theme()?;
+        ```
+      ]
+    ]
+    #only("3")[
+      ```rust
+      while let Some(e) = iter.next() {
+        ...
+      }
+      ```
+    ]
+  ]
 ]
 
 #new-section[Traits]
 #slide[
   = A good way to #text(style: "oblique", "interface") with other code
 
-  #grid[
-    #only("1", ferris(dir: rtl))
-  ][
+  #grid(columns: (3fr, 1fr))[
     ```rust
-    trait 
+    trait Iterator {
+      type Item;
+
+      fn next(&mut self) -> Option<Self::Item>;
+      fn count(self) -> usize
+        where Self: Sized { ... }
+    }
     ```    
+  ][
+    #only("1", ferris())
   ]
+
+  // Explain Associated types
+  // Self
+  // where clause
+  // required methods
+  // provided methods
+  //
+  // useful std traits
 ]
 
 #new-section[Macros]
@@ -362,9 +497,12 @@
 
 #new-section[Ecosystem]
 #slide[
+  // std
+  //   smart pointers (for heap allocation) (Box, Rc, Arc, ...)
+  //   std traits (ops, )
   // Cargo
   // Rustdoc
-  // Comunity
+  // Comunity (books)
 ]
 
 #slide[
