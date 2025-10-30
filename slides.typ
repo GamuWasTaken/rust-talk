@@ -473,7 +473,7 @@
     }
     ```    
   ][
-    #only("1", ferris())
+    #ferris()
   ]
 
   // Explain Associated types
@@ -483,25 +483,71 @@
   // provided methods
   //
   // useful std traits
+  //
+  // Note, in java when interface is used information is lost
+  //   you go up in the inheritance tree, loosing the knoledge of what type you were
+  //   in rust there is no inheritance tree, just a list of traits, therefore you don't loose info
+]
+
+#slide[
+  = Usefulness is also a trait
+
+  #grid()[
+    #ferris(dir: rtl)
+  ][
+    #item-by-item[
+      / Debug : 
+      / Default : 
+      / Clone, Copy : 
+      / std\:\:ops\:\:\* : 
+      / Iterator : 
+      / Drop : 
+    ]
+  ]
 ]
 
 #new-section[Macros]
-#slide[
-  = Macros
 
-  python en rust?!?!
-  // macro-rules
-  // procmacros
-  // derive macros
+#slide[
+  = Python in Rust !?!?
+  // https://docs.rs/inline-python/latest/inline_python/
+  #grid[]
+]
+
+#slide[
+  = Write macros with macros!
+  #grid[]
+]
+
+#slide[
+  = As easy as ```#[derive(Debug)]```
+  #grid[]
 ]
 
 #new-section[Ecosystem]
 #slide[
+  = Bateries mostly included!
   // std
   //   smart pointers (for heap allocation) (Box, Rc, Arc, ...)
-  //   std traits (ops, )
+  #grid[]
+]
+
+#slide[
+  = Barman bring me my wine
   // Cargo
+  #grid[]
+]
+
+#slide[
+  = You don't need docs if you can read code
   // Rustdoc
+  #grid[]
+]
+
+#slide[
+  = Plant a tree, have a son, write a book
+
+  #grid[]
   // Comunity (books)
 ]
 
