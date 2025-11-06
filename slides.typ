@@ -3,7 +3,6 @@
 #import metropolis: new-section, focus
 #import "@preview/codly:1.3.0": *
 
-
 #show: metropolis.setup.with(
   text-font: "DejaVu Sans",
   math-font: "DejaVu Math TeX Gyre",
@@ -504,6 +503,7 @@
       / Drop : 
     ]
   ]
+  // TODO revise this, i dont quite like how it looks
 ]
 
 #new-section[Macros]
@@ -511,12 +511,44 @@
 #slide[
   = Python in Rust !?!?
   // https://docs.rs/inline-python/latest/inline_python/
-  #grid[]
+  #grid(columns: (2fr,1fr))[
+    #for i in range(6) {
+      only(i, codly(
+        highlighted-lines: (i,)
+      ))
+    }
+    ```rust
+    println!("Im a macro!");
+    let pos = vec![1,2,3];
+    assert!(true, "Me too");
+    panic!("BOOM!");
+    todo!("Too lazy to finish");
+    ```
+  ][
+    #ferris()
+  ]
 ]
 
 #slide[
   = Write macros with macros!
-  #grid[]
+  #grid(columns:(2fr, 3fr))[
+    #ferris(dir: rtl)
+  ][
+    ```rust
+    macro_rules! debug_print {
+      ($expression: expr) => {
+        println!("{} = {:?}",
+          stringify!($expression),
+          $expression
+        );
+      }
+    }
+    ```
+
+    ```rust
+    debug_print!(3 + 3);
+    ```
+  ]
 ]
 
 #slide[
