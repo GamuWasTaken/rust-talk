@@ -1,6 +1,6 @@
 
 init:
-    nix-shell -p pdfpc polylux2pdfpc
+    nix-shell -p pdfpc polylux2pdfpc typst tinymist evince
 
 compile:
     typst compile --root . rust-slides.typ

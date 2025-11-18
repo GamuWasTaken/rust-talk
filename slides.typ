@@ -15,10 +15,6 @@
 
 #codly(
   display-name: false,
-  // number-format: none,
-  // zebra-fill: none,
-  // stroke: none,,
-  // lang-inset: 0pt,
 )
 
 #let ferris(dir: ltr, width: 260pt, type: "gesture") = scale(
@@ -213,11 +209,6 @@
     #ferris()
     
   ]
-  #toolbox.pdfpc.speaker-note("Ownership")
-  // TODO Explain ownership
-  // references
-  // mut references
-  // generics with lifetimes
 ]
 
 #new-section[Inmutability by default]
@@ -491,19 +482,55 @@
 #slide[
   = Usefulness is also a trait
 
-  #grid()[
+  #grid(columns: (2fr, 3fr))[
     #ferris(dir: rtl)
   ][
-    #item-by-item[
-      / Debug : 
-      / Default : 
-      / Clone, Copy : 
-      / std\:\:ops\:\:\* : 
-      / Iterator : 
-      / Drop : 
+    #only(1)[
+      ```rust
+      #[derive(Debug)]
+      struct Foo(i32, String)
+      ```
+    ]
+    #only(2)[
+      ```rust
+      impl Default for Foo {
+        fn default() -> Self {
+          Foo(3, "bar".into())
+        }
+      } 
+      ```
+    ]
+    #only(3)[
+      ```rust
+      #[derive(Clone, Copy)]
+      struct Vec2D {
+        x: f32,
+        y: f32
+      }
+      ```
+    ]
+    #only(4)[
+      ```rust
+      impl ops::Add<Self> for Vec2D {
+        type Output = Self;
+
+        fn add(
+          self,
+          other: Self
+        ) -> Self::Output {
+          ...
+        }
+      } 
+      ```
+    ]
+    #only(5)[
+      ```rust
+      for i in 0..10 {
+        println!("Hello!");
+      }
+      ```
     ]
   ]
-  // TODO revise this, i dont quite like how it looks
 ]
 
 #new-section[Macros]
@@ -553,38 +580,57 @@
 
 #slide[
   = As easy as ```#[derive(Debug)]```
-  #grid[]
+  #grid(columns: 1, rows: 2)[
+    #ferris(type: "happy")
+  ][
+    ```rust
+    #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+    struct Vec2D {
+      x: f32,
+      y: f32
+    }
+    ```
+  ]
 ]
 
 #new-section[Ecosystem]
 #slide[
-  = Bateries mostly included!
-  // std
-  //   smart pointers (for heap allocation) (Box, Rc, Arc, ...)
-  #grid[]
-]
-
-#slide[
-  = Barman bring me my wine
-  // Cargo
-  #grid[]
+  = One tool to rule them all
+  #grid[
+    #align(left)[
+      == `cargo new`
+      == `cargo run`
+      == `cargo build`
+      == `cargo add`
+      \
+      #only(2)[https://crates.io]
+    ]
+  ][
+    #ferris()
+  ]
 ]
 
 #slide[
   = You don't need docs if you can read code
   // Rustdoc
-  #grid[]
+  #grid[
+    #ferris(dir: rtl)
+  ][
+    ```rust
+    /// This is a comment 
+    /// that generates docs
+    struct Foo;
+    ```
+  ]
+  #align(center)[
+    https://doc.rust-lang.org/std/primitive.array.html
+  ]
 ]
 
 #slide[
   = Plant a tree, have a son, write a book
-
-  #grid[]
-  // Comunity (books)
-]
-
-#slide[
-  #show: focus
-  Something very important
-
+  #align(center)[
+    #ferris(type: "happy")
+    https://github.com/rust-unofficial/awesome-rust
+  ]
 ]
